@@ -216,6 +216,11 @@ app.get('/route', (req, res) => {
   }
 });
 
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'static/mapa.html'));
+});
+
+
 (async () => {
   try {
     console.log('⌛ Waiting for DB to be ready...');
