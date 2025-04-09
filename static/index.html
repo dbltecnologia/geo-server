@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mapa Inova</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>#map { height: 100vh; }</style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const map = L.map('map').setView([-15.793889, -47.882778], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  // Carrega os dados do backend (geojson)
+  axios.get('http://localhost:8000/geojson').then(resp => {
+    const geojsonLayer = L.geoJSON(resp.data, {
+      style: { color: 'blue', weight: 2 },
+      onEachFeature: (feature, layer) => {
+        const props = feature.properties;
+        layer.bindPopup(`<b>${props.NM_LOG}</b><br>Face: ${props.CD_FACE}`);
+      }
+    }).addTo(map);
+  });
+
+  // Exemplo: clique para ver endereço mais próximo
+  map.on('click', async e => {
+    const { lat, lng } = e.latlng;
+    const resp = await axios.get(`http://localhost:8000/reverse?lat=${lat}&lon=${lng}`);
+    L.popup()
+      .setLatLng([lat, lng])
+      .setContent(`<b>Mais próximo:</b><br>${resp.data.NM_LOG}`)
+      .openOn(map);
+  });
+</script>
+</body>
+</html>
