@@ -1,4 +1,4 @@
-# 📘 Documentação da API Inova Maps
+# 📘 Documentação 
 
 Esta API é desenvolvida em Node.js e suporta dados geográficos utilizando GeoJSON e MySQL, com funcionalidades de busca por endereço, geolocalização e rotas. A API emprega Docker e Turf.js para realizar análises espaciais avançadas.
 
